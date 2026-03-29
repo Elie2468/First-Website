@@ -82,12 +82,12 @@ function moveBasket(event){
     console.log("event object: ", event)
     // scoreEl.innerText = event.key
 
-    if(event.key == "d"){
-        basket.x+=15
+    if(event.key == "ArrowRight"){
+        basket.x+=25
         basketEl.style.left = basket.x+"px"
     }
-    if(event.key == "a"){
-        basket.x-=15
+    if(event.key == "ArrowLeft"){
+        basket.x-=25
         basketEl.style.left = basket.x+"px"
     }
     if(basket.x > window.innerWidth-basketEl.offsetWidth){
