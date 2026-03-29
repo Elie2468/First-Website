@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Apple</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        body {
+    background-color: aqua;
+    text-align: center;
+    height: 100vh;
+}
+
+#apple {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    /* border: 1px solid black; */
+    position: absolute;
+}
+
+#basket {
+    font-size: 150px;
+    width: 150px;
+    height: 150px;
+    /* border: 1px solid black; */
+    position: absolute;
+    top: 430px;
+}
+
+#basketEmoji {
+    position: absolute;  /* 👈 key */
+    top: -65px;              /* 👈 forces it to top */
+    left: -20px;
+}
+
+#explosion{
+    display: none;
+    font-size: 150px;
+    position: absolute;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Catch the Apple</h1>
+    <p id="score">Score: 0</p>
+    <div id="apple">🍍</div>
+    <div id="basket">
+        <span id="basketEmoji">🧺</span>
+    </div>
+
+    <div id="explosion">💥</div>
+    
+    <!-- <script src="script.js"></script> -->
+    <script>
+        const appleEl = document.getElementById("apple")
+const basketEl = document.getElementById("basket")
+const scoreEl = document.getElementById("score")
+// explosion
+const explosionEl = document.getElementById("explosion")
+
+
+let score = 0
+let apple = {
+    x: appleEl.offsetLeft,
+    y: appleEl.offsetTop,
+    w: appleEl.offsetWidth,
+    h: appleEl.offsetHeight
+}
+let basket = {
+    x: basketEl.offsetLeft,
+    y: basketEl.offsetTop,
+    w: basketEl.offsetWidth,
+    h: basketEl.offsetHeight
+}
+
+document.addEventListener("keydown", moveBasket)
+
+function moveBasket(event){
+    console.log("event object: ", event)
+    // scoreEl.innerText = event.key
+
+    if(event.key == "d"){
+        basket.x+=15
+        basketEl.style.left = basket.x+"px"
+    }
+    if(event.key == "a"){
+        basket.x-=15
+        basketEl.style.left = basket.x+"px"
+    }
+    if(basket.x > window.innerWidth-basketEl.offsetWidth){
+        basket.x = 0
+    }
+    if(basket.x < 0){
+        basket.x = window.innerWidth-basketEl.offsetWidth
+    }
+}
+let explosion = {
+    x:0,
+    y: window.innerHeight - 100
+}
+setInterval(moveApple, 20)
+function moveApple(){
+    apple.y += 5
+    appleEl.style.top = apple.y + "px"
+    if(apple.y > window.innerHeight){
+        score-=3
+        explosionEl.style.display = "inline"
+        explosionEl.style.left = apple.x + "px"
+        explosionEl.style.top = window.innerHeight - 100 + "px"
+        apple.y = 0
+        apple.x = Math.floor(Math.random()*window.innerWidth) - appleEl.offsetWidth
+        appleEl.style.left = apple.x+"px"
+
+    }
+    if(isCrashing(apple, basket)){
+        explosionEl.style.display = "none"
+        score++
+        apple.y = 0
+        apple.x = Math.floor(Math.random()*window.innerWidth) - appleEl.offsetWidth
+        appleEl.style.left = apple.x+"px"
+    }
+    if(score > 10 ){}//do something eg speed++
+    scoreEl.innerText = "Score: " + score
+
+}
+
+function isCrashing(a, b) {
+  let c1 = a.x < b.x + b.w;
+  let c2 = a.x + a.w > b.x;
+  let c3 = a.y < b.y + b.h;
+  let c4 = a.y + a.h > b.y;
+
+  return c1 && c2 && c3 && c4;
+}
+
+
+    </script>
+
+</body>
+</html>
