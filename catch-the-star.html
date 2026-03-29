@@ -106,7 +106,7 @@ function moveApple(){
     apple.y += 5
     appleEl.style.top = apple.y + "px"
     if(apple.y > window.innerHeight){
-        score-=3
+        score-=10
         explosionEl.style.display = "inline"
         explosionEl.style.left = apple.x + "px"
         explosionEl.style.top = window.innerHeight - 100 + "px"
@@ -117,7 +117,7 @@ function moveApple(){
     }
     if(isCrashing(apple, basket)){
         explosionEl.style.display = "none"
-        score++
+        score+=score+2
         apple.y = 0
         apple.x = Math.floor(Math.random()*window.innerWidth) - appleEl.offsetWidth
         appleEl.style.left = apple.x+"px"
