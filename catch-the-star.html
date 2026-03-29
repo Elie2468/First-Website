@@ -1,304 +1,143 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-<title>The Tech Lab - Games</title>
-
-<style>
-
-/* PAGE */
-
-body{
-font-family: Arial;
-margin:0;
-text-align:center;
-background: linear-gradient(to bottom,#020617,#0f172a,#1e293b);
-color:white;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Apple</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        body {
+    background-color: aqua;
+    text-align: center;
+    height: 100vh;
 }
 
-img {
-    width:100%;
-    border-radius:10px;
-
+#apple {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    /* border: 1px solid black; */
+    position: absolute;
 }
 
-
-/* NAVBAR */
-
-#nav{
-
-background: linear-gradient(to bottom,#020617,#020617);
-
-padding:22px;
-
-border-bottom:2px solid rgba(255,255,255,0.1);
-
+#basket {
+    font-size: 150px;
+    width: 150px;
+    height: 150px;
+    /* border: 1px solid black; */
+    position: absolute;
+    top: 430px;
 }
 
-
-
-.nav-item{
-
-display:inline-block;
-
-margin:0 20px;
-
-padding:8px 18px;
-
-font-weight:bold;
-
-border-radius:6px;
-
+#basketEmoji {
+    position: absolute;  /* 👈 key */
+    top: -65px;              /* 👈 forces it to top */
+    left: -20px;
 }
 
-
-
-.nav-item:hover{
-
-background-color:rgba(255,255,255,0.12);
-cursor: pointer;
-
+#explosion{
+    display: none;
+    font-size: 150px;
+    position: absolute;
 }
 
-
-
-/* HERO */
-
-#hero{
-
-margin:70px 20px;
-
-}
-
-
-
-h1{
-
-font-size:50px;
-
-margin:0 0 10px;
-
-}
-
-
-
-p{
-
-font-size:20px;
-
-color:rgba(255,255,255,0.8);
-
-}
-
-
-
-/* CARD AREA */
-
-#projects{
-
-width:100%;
-
-margin-top:40px;
-
-}
-
-
-
-/* CARDS */
-
-.card{
-
-display:inline-block;
-
-width:250px;
-
-aspect-ratio:3/4;
-
-padding:20px;
-
-margin:18px;
-
-background: linear-gradient(to bottom,#111827,#1f2937);
-
-border:1px solid rgba(255,255,255,0.15);
-
-border-radius:14px;
-
-box-shadow:0 12px 28px rgba(0,0,0,0.45);
-
-text-align:center;
-
-}
-
-
-
-/* CARD HOVER */
-
-.card:hover{
-
-box-shadow:0 20px 45px rgba(0,0,0,0.7);
-cursor: pointer;
-
-}
-
-
-
-/* CARD TEXT */
-
-.card h2{
-
-font-size:22px;
-
-margin:10px 0;
-
-}
-
-
-
-.card p{
-
-font-size:16px;
-
-color:rgba(255,255,255,0.7);
-
-}
-
-
-
-/* BUTTON */
-
-.button{
-
-margin:15px;
-
-padding:10px;
-
-border-radius:8px;
-
-background: linear-gradient(to bottom,#22d3ee,#2563eb);
-
-font-weight:bold;
-
-}
-
-
-
-/* FOOTER */
-
-footer{
-
-margin-top:80px;
-
-padding:30px;
-
-background: linear-gradient(to bottom,#020617,#000);
-
-font-size:14px;
-
-color:rgba(255,255,255,0.7);
-
-}
-
-</style>
-
+    </style>
 </head>
-
-
-
 <body>
+    <h1>Catch the Apple</h1>
+    <p id="score">Score: 0</p>
+    <div id="apple">🍍</div>
+    <div id="basket">
+        <span id="basketEmoji">🧺</span>
+    </div>
+
+    <div id="explosion">💥</div>
+    
+    <!-- <script src="script.js"></script> -->
+    <script>
+        const appleEl = document.getElementById("apple")
+const basketEl = document.getElementById("basket")
+const scoreEl = document.getElementById("score")
+// explosion
+const explosionEl = document.getElementById("explosion")
 
 
+let score = 0
+let apple = {
+    x: appleEl.offsetLeft,
+    y: appleEl.offsetTop,
+    w: appleEl.offsetWidth,
+    h: appleEl.offsetHeight
+}
+let basket = {
+    x: basketEl.offsetLeft,
+    y: basketEl.offsetTop,
+    w: basketEl.offsetWidth,
+    h: basketEl.offsetHeight
+}
 
-<!-- NAV -->
+document.addEventListener("keydown", moveBasket)
 
-<div id="nav">
+function moveBasket(event){
+    console.log("event object: ", event)
+    // scoreEl.innerText = event.key
 
-<span class="nav-item">Home</span>
+    if(event.key == "d"){
+        basket.x+=15
+        basketEl.style.left = basket.x+"px"
+    }
+    if(event.key == "a"){
+        basket.x-=15
+        basketEl.style.left = basket.x+"px"
+    }
+    if(basket.x > window.innerWidth-basketEl.offsetWidth){
+        basket.x = 0
+    }
+    if(basket.x < 0){
+        basket.x = window.innerWidth-basketEl.offsetWidth
+    }
+}
+let explosion = {
+    x:0,
+    y: window.innerHeight - 100
+}
+setInterval(moveApple, 20)
+function moveApple(){
+    apple.y += 5
+    appleEl.style.top = apple.y + "px"
+    if(apple.y > window.innerHeight){
+        score-=3
+        explosionEl.style.display = "inline"
+        explosionEl.style.left = apple.x + "px"
+        explosionEl.style.top = window.innerHeight - 100 + "px"
+        apple.y = 0
+        apple.x = Math.floor(Math.random()*window.innerWidth) - appleEl.offsetWidth
+        appleEl.style.left = apple.x+"px"
 
-<span class="nav-item">Projects</span>
+    }
+    if(isCrashing(apple, basket)){
+        explosionEl.style.display = "none"
+        score++
+        apple.y = 0
+        apple.x = Math.floor(Math.random()*window.innerWidth) - appleEl.offsetWidth
+        appleEl.style.left = apple.x+"px"
+    }
+    if(score > 10 ){}//do something eg speed++
+    scoreEl.innerText = "Score: " + score
 
-<span class="nav-item">Games</span>
+}
 
-<span class="nav-item">Contact</span>
+function isCrashing(a, b) {
+  let c1 = a.x < b.x + b.w;
+  let c2 = a.x + a.w > b.x;
+  let c3 = a.y < b.y + b.h;
+  let c4 = a.y + a.h > b.y;
 
-</div>
-
-
-
-<!-- HERO -->
-
-<div id="hero">
-
-<h1>The Tech Lab Games</h1>
-
-<p>Games and apps built with code</p>
-
-</div>
-
-
-
-<!-- CARDS -->
-
-<div id="projects">
-
-
-
-<div class="card">
-    <img src="https://rbscode.com/Student-Portal/images/30.png" alt="treasure-chest">
-  
-
-<h2>Coin Clicker</h2>
-
-<p>Build a money empire by clicking coins.</p>
-
-<div class="button">Launch</div>
-
-</div>
-
-
-
-<div class="card">
-    <img src="https://rbscode.com/Student-Portal/images/31.png" alt="star-catcher">
-
-<h2>Catch The Star</h2>
-
-<p>Move the basket and catch falling apples.</p>
-
-<a href="catch-the-star.html">
-    <div class="button">Launch</div>
-</a>
-
-</div>
-
-
-
-<div class="card">
-    <img src="https://rbscode.com/Student-Portal/images/32.png" alt="space-shooter-game-screenshot">
-
-
-<h2>Space Shooter</h2>
-
-<p>Defeat alien ships and save the galaxy.</p>
-
-<div class="button">Launch</div>
-
-</div>
+  return c1 && c2 && c3 && c4;
+}
 
 
-
-</div>
-
-
-
-<footer>
-
-© Future Tech Lab
-
-</footer>
-
-
+    </script>
 
 </body>
-
 </html>
