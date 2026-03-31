@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Clicker</title>
+    <style>
+        body {
+    background-color: gold;
+    text-align: center;
+}
+
+#coin {
+    font-size: 200px;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    user-select: none;
+    cursor: pointer;
+}
+    </style>
+</head>
+<body>
+    <h1>Click the Coin</h1>
+    <p id="score">Score = 0</p>
+    <div id="coin">🪙</div>
+    
+    <script>
+        const coinEl = document.getElementById("coin")
+const scoreEl = document.getElementById("score")
+
+let currency = "coins"
+
+let score = 1
+
+coinEl.addEventListener("click", increaseScore)
+
+function increaseScore(){
+    score+=score
+    scoreEl.innerText = score
+}
+
+document.addEventListener("keydown", changeCurrency)
+
+function changeCurrency(){
+    
+    if (currency == "coins" ){
+        coinEl.innerText = "💵"       
+        currency = "notes"
+
+    } 
+    else {
+        coinEl.innerText = "🪙"
+        currency = "coins"
+    }
+
+}
+    </script>
+</body>
+</html>
