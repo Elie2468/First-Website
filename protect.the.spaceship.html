@@ -91,13 +91,36 @@ const keys = {};
 document.addEventListener('keydown', e => keys[e.key] = true);
 document.addEventListener('keyup', e => keys[e.key] = false);
 
-// Spawn blocks
+// ✅ FIXED Spawn blocks with guaranteed gap
 function spawnBlock() {
     const totalBlocks = 1 + additionalBlocks;
+
+    // Always leave a safe gap wider than the player
+    const gapSize = player.width + 20;
+    const gapX = Math.random() * (canvas.width - gapSize);
+
     for (let i = 0; i < totalBlocks; i++) {
         const size = 30 + Math.random() * 20;
-        const x = Math.random() * (canvas.width - size);
-        blocks.push({ x, y: -size, width: size, height: size });
+
+        let x;
+        let attempts = 0;
+
+        // Try to place block outside the gap
+        do {
+            x = Math.random() * (canvas.width - size);
+            attempts++;
+        } while (
+            x < gapX + gapSize &&
+            x + size > gapX &&
+            attempts < 20
+        );
+
+        blocks.push({
+            x,
+            y: -size,
+            width: size,
+            height: size
+        });
     }
 }
 
@@ -123,7 +146,7 @@ function update() {
             player.y + player.height > blocks[i].y
         ) {
             gameOver = true;
-            restartBtn.style.display = "block"; // SHOW BUTTON
+            restartBtn.style.display = "block";
         }
 
         if (blocks[i].y > canvas.height) {
